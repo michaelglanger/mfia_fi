@@ -171,6 +171,15 @@ plot_ssn(sf1["Maturity"], sf1["Y"],
 λ1 = 1.00
 
 
+def ns(beta0, beta1, beta2, lambda0, df_maturity):
+    result = (
+        (beta0) +
+        (beta1 * ((1 - np.exp(-df_maturity / lambda0)) / (df_maturity / lambda0))) +
+        (beta2 * ((((1 - np.exp(-df_maturity / lambda0)) / (df_maturity / lambda0))) - (np.exp(-df_maturity / lambda0))))
+    )
+    return result
+
+
 def nss(beta0, beta1, beta2, beta3, lambda0, lambda1, df_maturity):
     result = (
         (beta0) +
@@ -240,6 +249,7 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 # toolbox.register("mate", tools.cxTwoPoint)
 toolbox.register("mate", tools.cxBlend, alpha=0.5)
 toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
+toolbox.register("select", tools.selNSGA2)
 toolbox.register("evaluate", getLowest)
 toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individual)
 # toolbox.register("mutate", tools.mutESLogNormal, low=0, up=100, indpb=0.05)
